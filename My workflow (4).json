@@ -244,7 +244,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=	YOUR_GEMINI_API_KEY",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -271,7 +271,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=	YOUR_GEMINI_API_KEY",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -298,7 +298,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "url": "https://api.telegram.org/bot<BOT_TOKEN>/sendMessage",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -339,7 +339,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "url": "https://api.telegram.org/bot<BOT_TOKEN>/sendMessage",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -414,7 +414,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "url": "https://api.telegram.org/bot<BOT_TOKEN>/sendMessage",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -451,7 +451,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "url": "https://api.telegram.org/bot<BOT_TOKEN>/sendMessage",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -518,7 +518,7 @@
     },
     {
       "parameters": {
-        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "url": "https://api.telegram.org/bot<BOT_TOKEN>/sendMessage",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"chat_id\": \"{{ $('Telegram Trigger').item.json.message.chat.id }}\",\n  \"text\": \"{{ $json.text }}\",\n  \"parse_mode\": \"Markdown\"\n}\n",
@@ -694,7 +694,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{ $json.message.voice.file_id }}",
+        "url": "=https://api.telegram.org/bot<BOT_TOKEN>\n/getFile?file_id={{ $json.message.voice.file_id }}",
         "options": {
           "response": {
             "response": {
@@ -714,7 +714,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/{{ $json.result.file_path }}",
+        "url": "=https://api.telegram.org/file/bot<BOT_TOKEN>\n/{{ $json.result.file_path }}",
         "options": {
           "response": {
             "response": {
@@ -752,7 +752,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "url": "=https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -814,7 +814,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{ $json.message.document.file_id }}",
+        "url": "=https://api.telegram.org/bot<BOT_TOKEN>\n/getFile?file_id={{ $json.message.document.file_id }}",
         "options": {
           "response": {
             "response": {
@@ -834,7 +834,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/{{ $json.result.file_path }}",
+        "url": "=https://api.telegram.org/file/bot<BOT_TOKEN>\n/{{ $json.result.file_path }}",
         "options": {
           "response": {
             "response": {
@@ -897,7 +897,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{$json.file_id}}",
+        "url": "=https://api.telegram.org/bot<BOT_TOKEN>\n/getFile?file_id={{$json.file_id}}",
         "options": {
           "response": {
             "response": {
@@ -917,7 +917,7 @@
     },
     {
       "parameters": {
-        "url": "=\thttps://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/{{ $json.result.file_path }}",
+        "url": "=\thttps://api.telegram.org/file/bot<BOT_TOKEN>\n/{{ $json.result.file_path }}",
         "options": {
           "response": {
             "response": {
