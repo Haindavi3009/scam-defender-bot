@@ -29,8 +29,6 @@ Built using [n8n](https://n8n.io) and **Gemini 2.5 Flash API**, this smart assis
 - [Telegram Bot API](https://core.telegram.org/bots/api)
 
 ---
-🔒 Note: API keys and tokens are excluded for security. Replace placeholders with your own to test the workflow.
----
 
 ## 🖼️ Demo
 
@@ -73,7 +71,9 @@ Built using [n8n](https://n8n.io) and **Gemini 2.5 Flash API**, this smart assis
 3. Deploy & start interacting with the Telegram bot
 
 ---
-
+🔒 Sensitive API keys have been removed for public safety.
+🔒 Note: API keys and tokens are excluded for security. Replace placeholders with your own to test the workflow.
+---
 ## ✍️ Author
 
 **Haindavi Sira**  
