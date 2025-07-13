@@ -1,0 +1,1348 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -620,
+        -60
+      ],
+      "id": "32145778-dc4a-4675-9ef2-06c94ebe7ac8",
+      "name": "Telegram Trigger",
+      "webhookId": "475da200-7a07-4c0c-b604-599a01ade446",
+      "credentials": {
+        "telegramApi": {
+          "id": "bMgbQXMYuyCDALMk",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text?.toLowerCase() || '' }}\n",
+                    "rightValue": "(report|complain)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "8150e69f-7e94-4fe3-856f-52970b43f032"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "report"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d6179f2a-955d-4bac-b457-5adc341e4cb3",
+                    "leftValue": "={{ $json.message.text?.toLowerCase() || '' }}\n\n",
+                    "rightValue": "(latest|scam|alert)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "scam_alerts"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3723ccfd-ba01-4cb0-b12c-9b322f18bff6",
+                    "leftValue": "={{ $json.message.text || '' }}\n",
+                    "rightValue": "/start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "start"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d97b13fa-5414-48f2-9222-4f2221693757",
+                    "leftValue": "={{ $json.message.voice ? 'voice' : ($json.message.text ? 'text' : 'unknown') }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "default text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8b2209c3-3096-419e-ae4d-43460729295b",
+                    "leftValue": "={{ $json.message.voice ? 'voice' : ($json.message.text ? 'text' : 'unknown') }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a7747985-6bd9-4857-affe-a7a17c3a0d63",
+                    "leftValue": "={{ $json.message.document?.mime_type || '' }}\n",
+                    "rightValue": "application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "application/pdf"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "12cc6a8d-5579-47f9-a8eb-26c702b7305c",
+                    "leftValue": "={{ Array.isArray($json.message.photo) ? 'image' : 'not_image' }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "screenshot"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -440,
+        -160
+      ],
+      "id": "825046dc-dbda-499e-a0fc-1e40b52b5bda",
+      "name": "Switch",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2d9eb352-8ac1-4da3-b952-db29edf96415",
+              "name": "userQuery",
+              "value": "={{ $json.text || $json.message.text || ' ' }}\n",
+              "type": "string"
+            },
+            {
+              "id": "b46fc7ea-cd91-45fd-8410-1d2940127e4d",
+              "name": "userQuerySafe",
+              "value": "={{ JSON.stringify($json.text || $json.message.text || ' ').slice(1, -1) }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        260
+      ],
+      "id": "856797b0-aae1-4898-89c2-4a09c12d4754",
+      "name": "Prepare User Message"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": " JSON"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=\n{\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are an expert scam detector.\\n\\n📌 First, check if the message is casual or general life conversation. For example, these are NOT scams:\\n- Greetings like 'hi', 'hello', 'good morning'\\n- Daily questions like 'Did you eat?', 'Where are you from?', 'What are you doing?'\\n- Friendly messages like 'Are you working at TCS?', 'Which company?', 'Are you single?'\\n- Resume requests without urgency or money\\n✅ If the message is clearly casual/life-related and not asking for money or sending links:\\nRespond:\\n✅ This appears to be a casual message. No scam indicators found.\\nScam Risk: 🟢 Low\\n\\n📎 Next, analyze educational PDFs or workshop messages:\\n- If the PDF/poster is from a known or official source (e.g., college department, Google)\\n- AND there is no fee, or fee is normal, no urgency, and grammar is good\\n➤ Then say:\\n✅ This appears to be a genuine educational/workshop opportunity.\\nScam Risk: 🟢 Low\\nAll The Best.\\n\\n📌 Special rule: Paid but official content (e.g., Google Text-to-Speech pricing, n8n, Gemini Pro)\\n- If a message refers to fees, but is from an official site and tone is normal ➤ Then say:\\n✅ This appears to be a standard official message with pricing details.\\nScam Risk: 🟢 Low\\n\\n📌 Offer letters and job onboarding\\n- If a message refers to an “Accept Offer” button, ask: \\\"Did you accept the offer?\\\"\\n→ If yes, ask: \\\"Did they ask for a screenshot?\\\"\\n→ If yes and no money is asked:\\n✅ Then say:\\n✅ This seems like a legitimate onboarding process. Congratulations!\\nScam Risk: 🟢 Low\\n→ If money is asked:\\n⚠ Then say:\\n⚠ Red flag: Asking for money after offer acceptance is suspicious.\\nScam Risk: 🔴 High\\n\\n📌 Posters about competitions or college events:\\n- If college name is visible and poster looks genuine ➤ Then say:\\n✅ This appears to be an official announcement.\\nScam Risk: 🟢 Low\\n- If no poster is provided ➤ Ask: \\\"Please send a screenshot or poster.\\\"\\n\\n📌 Shopping-related offers from known brands:\\n✅ This appears to be a valid offer.\\nScam Risk: 🟢 Low\\n\\n📌 If someone asks for contact info AND uses urgency like \\\"limited seats\\\", and it’s not shopping:\\n⚠ This message shows medium scam indicators.\\nScam Risk: 🟡 Medium\\n\\n🚨 Red flag indicators:\\n- Urgent phrases like “immediately pay”, “urgent job”\\n- Payment or OTP requests, suspicious links\\n- Poor grammar, weird formatting\\n- Job messages with unrealistic pay\\n- Software download links from unknown sources\\n- Impersonation using Gmail/Telegram etc\\n➤ Then say:\\n⚠ This message shows scam-like indicators. Please verify further.\\nScam Risk: 🔴 High or 🟡 Medium\\n\\n✅ If everything looks good:\\n✅ This appears to be a genuine opportunity. Congratulations!\\nScam Risk: 🟢 Low\\n\\nNow analyze this message:\\n{{ JSON.stringify($json.userQuery || ' ').slice(1, -1) }}\"\n        }\n      ]\n    }\n  ]\n}\n\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        280
+      ],
+      "id": "4ee4b7f8-1335-4fb2-a119-10bb619bf2dd",
+      "name": "ask gemini"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": " application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Summarize the most recent scam alerts issued in India. Include common scam types like job frauds, fake customer care numbers, phishing links, QR scams, etc. Mention recent techniques reported by RBI or cybercrime.gov.in. Keep it short and helpful.\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        360,
+        -80
+      ],
+      "id": "78d9ef23-b793-48af-97d7-c51737984a69",
+      "name": "Fetch Scam Alerts"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}"
+            },
+            {
+              "name": " parse_mode",
+              "value": " Markdown"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1660,
+        100
+      ],
+      "id": "426fd652-608b-4e46-a120-fc24386bdfeb",
+      "name": "Send Gemini Reply (Raw Telegram)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        820,
+        -160
+      ],
+      "id": "10bf8842-b69e-438c-a6b6-7570af3726ea",
+      "name": "Send Scam Alerts to Telegram"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        600,
+        -160
+      ],
+      "id": "d9db582d-5e59-4342-844a-7e1e7f1bb74f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0acbbaa6-9d9a-4416-ad66-ba5d8f33b4c6",
+              "name": " Text",
+              "value": "🚨 Here's how to officially report a scam in India:  🔹 National Cybercrime Portal:   https://cybercrime.gov.in/  🔹 RBI Scam Reporting Page:   https://cms.rbi.org.in/  📞 Cyber Helpline (India): 1930 (24x7 toll-free)  📝 Include these in your complaint: • Chat/Call Screenshots   • Phone Number, Email or UPI ID   • Description of incident   • Transaction details (if applicable)  Stay safe and alert. Report all scams through official platforms only.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -340
+      ],
+      "id": "0b6b0094-3c23-4d07-a847-1aeca4af20f9",
+      "name": "Set Report Info Response"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json[\" Text\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        -340
+      ],
+      "id": "0df708e1-54ce-4c58-ba89-3ad88b9fc15a",
+      "name": "Send Report Info to Telegram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}"
+            },
+            {
+              "name": " parse_mode",
+              "value": " Markdown"
+            },
+            {
+              "name": "reply_markup",
+              "value": "={\n  \"inline_keyboard\": [\n    [\n      {\n        \"text\": \"📎 Report on Cybercrime Portal\",\n        \"url\": \"https://cybercrime.gov.in/\"\n      }\n    ],\n    [\n      {\n        \"text\": \"📖 Scam Reporting Guide (PDF)\",\n        \"url\": \"https://cms.rbi.org.in\"\n      }\n    ]\n  ]\n}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        300
+      ],
+      "id": "363dd090-f0fa-42ca-8d56-043604757a2d",
+      "name": "Send Gemini Reply (Raw Telegram)1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ce043bb-e44c-40fa-b0b2-930087b90150",
+              "name": "text",
+              "value": "=👋 Welcome to Scam Defender Bot!  You can send me any suspicious message and I’ll detect if it’s a scam.  Try: • job offer from Dubai   • QR code payment   • any latest scams?   • where to report  Stay safe online! 🔐",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        60
+      ],
+      "id": "5ad2f820-f7e2-4535-9be5-e643b8f15203",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $('Telegram Trigger').item.json.message.chat.id }}\",\n  \"text\": \"{{ $json.text }}\",\n  \"parse_mode\": \"Markdown\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        120
+      ],
+      "id": "34565393-afd6-46b6-9baf-55325a489cea",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "19_rmuswJ9RUKhBaJGQSHwls0yopTT96cAwwVwMteA1E",
+          "mode": "list",
+          "cachedResultName": "scam_defender_logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19_rmuswJ9RUKhBaJGQSHwls0yopTT96cAwwVwMteA1E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19_rmuswJ9RUKhBaJGQSHwls0yopTT96cAwwVwMteA1E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_input": "={{ $('Prepare User Message').item.json.userQuery }}",
+            "gemini_reply": "={{ $json.result.text.match(/\\*\\*Scam Type:\\*\\*\\s*(.*)/)?.[1] || 'N/A' }}\n",
+            "scam_risk": "={{ $json.result.text.match(/Scam Risk:\\s*(?:🔴|🟡|🟢)?\\s*(\\w+)/)?.[1] || 'N/A' }}\n",
+            "time stamp": "={{ $now }}",
+            "user_id": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "user_input",
+              "displayName": "user_input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gemini_reply",
+              "displayName": "gemini_reply",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scam_risk",
+              "displayName": "scam_risk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "time stamp",
+              "displayName": "time stamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1820,
+        300
+      ],
+      "id": "beee452d-8ac0-4a0a-8311-193a3f6846d5",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QLvuzMDPY5s6kLN2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.candidates[0].content.parts[0].text.match(/Scam Risk:\\s*(.*)/)?.[1] }}",
+                    "rightValue": "🟢 Low",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4315a851-ecee-47d6-bd8b-b3cdd6860614"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "low"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "af6c80a2-9204-4565-bc3f-f4b2daeef331",
+                    "leftValue": "={{ $json.candidates[0].content.parts[0].text.match(/Scam Risk:\\s*(.*)/)?.[1] }}",
+                    "rightValue": "🟢 Low",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "medium or high"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1360,
+        280
+      ],
+      "id": "2fb24897-f648-4540-b592-56c59dfe7de4",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{ $json.message.voice.file_id }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        480
+      ],
+      "id": "07c6dc04-b3b4-4a18-9863-6476ab1c2f36",
+      "name": "Get File Path"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/{{ $json.result.file_path }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        480
+      ],
+      "id": "d32d0e7d-4827-42ac-b99e-aef17bb5c5a6",
+      "name": "Download voice path"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "destinationKey": "base64",
+        "options": {
+          "keepSource": "both"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        340,
+        480
+      ],
+      "id": "6396d915-b9ca-452f-b937-a2b5527da282",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyBdS_XgaYBsWOih66GFAppPWf3D5gwoNYo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Generate a detailed transcript containing only the spoken text from this audio. Exclude all speaker labels like Speaker 1 and system-generated comments like here is a detailed transcript. Transcribe each segment in the original language as it’s spoken, without mentioning or tagging the language itself—just the plain spoken words.\"\n        },\n        {\n          \"inlineData\": {\n            \"mimeType\": \"audio/ogg\",\n            \"data\": \"{{ $json.base64 }}\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        480
+      ],
+      "id": "3e83364b-b769-4aca-a0b0-b5786dc8a310",
+      "name": "Transcribe to text"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c5fd297f-9d47-4e84-b414-4716393d27ab",
+              "name": "=userQuery",
+              "value": "={{ $json.userQuery }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        840,
+        480
+      ],
+      "id": "a5a0392c-680f-4832-b19d-f2692134585b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n{\njson: {\nuserQuery: $json.candidates[0].content.parts[0].text\n.replace(/(?:\\b(?:pip+|um+|ah+|eh+|hm+|hmm+|mhm+|uh+|er+)\\b[\\s.,]*)+/gi, '')\n.replace(/[^\\w\\s.,?!]/g, '') // Remove non-word junk\n.replace(/\\s+/g, ' ') // Normalize spaces\n.trim()\n}\n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        480
+      ],
+      "id": "af8c7892-6090-43f8-9e5f-e00f497134b7",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{ $json.message.document.file_id }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        660
+      ],
+      "id": "845c5c47-c36a-4a1f-b853-c0c74d84acf3",
+      "name": "get pdf file path"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/{{ $json.result.file_path }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        660
+      ],
+      "id": "b3b39586-ff7b-4e83-9abc-55eeede3b8d5",
+      "name": "download file"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        460,
+        660
+      ],
+      "id": "b275f643-e7ce-4812-babe-c4f5e7d5651e",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c28a71e2-e7b9-490a-8e87-a85fb559776b",
+              "name": "file_id",
+              "value": "={{ $json.message.photo[$json.message.photo.length - 1].file_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ce33d77f-3637-42f3-b9e9-65edfe5daddd",
+              "name": "type",
+              "value": "image",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -100,
+        960
+      ],
+      "id": "01c1c878-5462-489f-8d87-052d19f5eb2e",
+      "name": "Set File ID"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY\n/getFile?file_id={{$json.file_id}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        120,
+        960
+      ],
+      "id": "bb417218-1de2-4d0c-acac-af6a20444a0a",
+      "name": "Get File Info"
+    },
+    {
+      "parameters": {
+        "url": "=\thttps://api.telegram.org/file/bot7841006883:AAGY-N9NoSA376N9zCRCL-cbWwh2957XdDY/{{ $json.result.file_path }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        340,
+        960
+      ],
+      "id": "b8562113-8720-4771-867c-9cc27d25cd00",
+      "name": "download image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ocr.space/parse/image",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={\n  \"apikey\": \"K89225874888957\"\n}\n",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "filetype",
+              "value": "JPG"
+            },
+            {
+              "name": "language",
+              "value": "eng"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        960
+      ],
+      "id": "74a0a58f-0191-4a60-8ee9-d437d9a76fe4",
+      "name": "call ocr.space"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "481bf114-6936-4023-ad51-e1b1475723a2",
+              "name": "userQuery",
+              "value": "={{ $json.ParsedResults[0].ParsedText || ' ' }}",
+              "type": "string"
+            },
+            {
+              "id": "1b15d24a-a3d2-4b7a-bf60-e300dcca5b51",
+              "name": "userQuerySafe",
+              "value": "={{ JSON.stringify($json.ParsedResults[0].ParsedText || ' ').slice(1, -1) }}",
+              "type": "string"
+            },
+            {
+              "id": "bf1a2387-5e09-4731-b5e0-1f5cf4109a49",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        960
+      ],
+      "id": "afb06865-f35b-4e12-9c41-869d246ca355",
+      "name": "Edit Fields2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Set Report Info Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Scam Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare User Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get File Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get pdf file path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare User Message": {
+      "main": [
+        [
+          {
+            "node": "ask gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ask gemini": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Scam Alerts": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send Scam Alerts to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Report Info Response": {
+      "main": [
+        [
+          {
+            "node": "Send Report Info to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Gemini Reply (Raw Telegram)": {
+      "main": [
+        []
+      ]
+    },
+    "Send Gemini Reply (Raw Telegram)1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Send Gemini Reply (Raw Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Gemini Reply (Raw Telegram)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Path": {
+      "main": [
+        [
+          {
+            "node": "Download voice path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download voice path": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe to text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe to text": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "ask gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get pdf file path": {
+      "main": [
+        [
+          {
+            "node": "download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Prepare User Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File ID": {
+      "main": [
+        [
+          {
+            "node": "Get File Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Info": {
+      "main": [
+        [
+          {
+            "node": "download image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "download image": {
+      "main": [
+        [
+          {
+            "node": "call ocr.space",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "call ocr.space": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "ask gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5ac50864-68ec-4eb2-8be7-678a8843f6cf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff1f5d5732df7d647da3db0f5dbcb3eb04343f81701c31db7492339e92c33dec"
+  },
+  "id": "Yc4u6VkimFfwXvds",
+  "tags": []
+}
